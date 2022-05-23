@@ -11,12 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.animatedObjects.notMovingObject;
 
-import java.io.SyncFailedException;
-
 public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        /*notMovingObject boss = new notMovingObject(50, 50, 10,
+        notMovingObject boss = new notMovingObject(0, 0, 10,
                 MainFx.class.getResource("images/bossFly/").toExternalForm());
 
         AnchorPane anchorPane = new AnchorPane();
@@ -39,13 +37,7 @@ public class MainFx extends Application {
                 s%=6;
                 context.setFill(Color.WHITE);
                 context.fillRect(0,0,1280,720);
-                context.save();
-
-                context.translate(50, 50);
-                context.drawImage(boss.getNextFrame(), 0, 0);
-
-                context.restore();
-                System.gc();
+                boss.print(context);
             }
         };
 
@@ -53,8 +45,7 @@ public class MainFx extends Application {
 
         stage.setHeight(720);
         stage.setWidth(1280);
-        context.clearRect(0,0,1280,720);
-        stage.show();*/
+        stage.show();
 
     }
 

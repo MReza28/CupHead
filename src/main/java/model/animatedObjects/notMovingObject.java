@@ -6,23 +6,32 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class notMovingObject {
-    private int centerFromTop;
-    private int centerFromLeft;
+    private double centerFromTop;
+    private double centerFromLeft;
+    private double height;
+    private double width;
     private ArrayList<Image> frames;
     private int lastFrameReturned;
 
     //CONSTRUCTORS
-    protected notMovingObject (int centerFromTop, int centerFromLeft) {
+    protected notMovingObject () {
+        this.centerFromTop = 0;
+        this.centerFromLeft = 0;
+        this.height = 0;
+        this.width = 0;
+        this.frames = new ArrayList<>();
+        this.lastFrameReturned = 0;
+    }
+    protected notMovingObject (double centerFromTop, double centerFromLeft) {
+        this();
         this.centerFromTop = centerFromTop;
         this.centerFromLeft = centerFromLeft;
-        this.lastFrameReturned = 0;
-        frames = new ArrayList<>();
     }
-    protected notMovingObject (int centerFromTop, int centerFromLeft, String address) {
+    protected notMovingObject (double centerFromTop, double centerFromLeft, String address) {
         this(centerFromTop, centerFromLeft);
         this.addFrameToObject(address);
     }
-    public notMovingObject (int centerFromTop, int centerFromLeft, int howManyFrames, String baseAddress) {
+    public notMovingObject (double centerFromTop, double centerFromLeft, int howManyFrames, String baseAddress) {
         this(centerFromTop, centerFromLeft);
         this.resetAndAddAllFrames(baseAddress, howManyFrames);
     }
@@ -31,11 +40,11 @@ public class notMovingObject {
 
 
     //SETTERS
-    public void setCenterFromTop(int centerFromTop) {
+    public void setCenterFromTop(double centerFromTop) {
         this.centerFromTop = centerFromTop;
     }
 
-    public void setCenterFromLeft(int centerFromLeft) {
+    public void setCenterFromLeft(double centerFromLeft) {
         this.centerFromLeft = centerFromLeft;
     }
     ////SETTERS
@@ -43,11 +52,11 @@ public class notMovingObject {
 
 
     //GETTERS
-    protected int getCenterFromTop() {
+    protected double getCenterFromTop() {
         return centerFromTop;
     }
 
-    protected int getCenterFromLeft() {
+    protected double getCenterFromLeft() {
         return centerFromLeft;
     }
 
@@ -55,12 +64,12 @@ public class notMovingObject {
         return this.frames.size();
     }
 
-    public Image getFrame(int index) {
+    protected Image getFrame(int index) {
         this.lastFrameReturned = index;
         return this.frames.get(index);
     }
 
-    public Image getNextFrame () {
+    protected Image getNextFrame () {
         int thisFrame = (this.lastFrameReturned + 1) % this.getFramesCount();
         return getFrame(thisFrame);
     }
@@ -93,4 +102,16 @@ public class notMovingObject {
     }
     ////HANDLING IMAGE INPUTS IN OBJECT
 
+
+
+
+    //HANDLING OUTPUT
+    public void print (GraphicsContext context) {
+        context.save();
+
+        context.translate(this.getCenterFromLeft(),this.getCenterFromTop());
+        context.drawImage(this.getNextFrame(),0,0, 50, 50);
+
+        context.restore();
+    }
 }
