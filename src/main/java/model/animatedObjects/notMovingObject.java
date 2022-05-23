@@ -8,21 +8,19 @@ import java.util.ArrayList;
 public class notMovingObject {
     private double centerFromTop;
     private double centerFromLeft;
-    private double height;
-    private double width;
+    private double resize;
     private ArrayList<Image> frames;
     private int lastFrameReturned;
 
     //CONSTRUCTORS
-    protected notMovingObject () {
+    private notMovingObject () {
         this.centerFromTop = 0;
         this.centerFromLeft = 0;
-        this.height = 0;
-        this.width = 0;
+        this.resize = 1;
         this.frames = new ArrayList<>();
         this.lastFrameReturned = 0;
     }
-    protected notMovingObject (double centerFromTop, double centerFromLeft) {
+    private notMovingObject (double centerFromTop, double centerFromLeft) {
         this();
         this.centerFromTop = centerFromTop;
         this.centerFromLeft = centerFromLeft;
@@ -34,6 +32,10 @@ public class notMovingObject {
     public notMovingObject (double centerFromTop, double centerFromLeft, int howManyFrames, String baseAddress) {
         this(centerFromTop, centerFromLeft);
         this.resetAndAddAllFrames(baseAddress, howManyFrames);
+    }
+    public notMovingObject (double centerFromTop, double centerFromLeft, int howManyFrames, String baseAddress, double resize) {
+        this(centerFromTop, centerFromLeft, howManyFrames, baseAddress);
+        this.resize = resize;
     }
     ////CONSTRUCTORS
 
@@ -73,6 +75,14 @@ public class notMovingObject {
         int thisFrame = (this.lastFrameReturned + 1) % this.getFramesCount();
         return getFrame(thisFrame);
     }
+
+    protected double getImageHeight (int index) {
+        return this.getFrame(index).getHeight();
+    }
+
+    protected double getImageWidth (int index) {
+        return this.getFrame(index).getWidth();
+    }
     ////GETTERS
 
 
@@ -110,7 +120,7 @@ public class notMovingObject {
         context.save();
 
         context.translate(this.getCenterFromLeft(),this.getCenterFromTop());
-        context.drawImage(this.getNextFrame(),0,0, 50, 50);
+        context.drawImage(this.getNextFrame(),0,0, 50, 200);
 
         context.restore();
     }
