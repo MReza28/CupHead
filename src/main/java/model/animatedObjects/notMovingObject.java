@@ -11,6 +11,8 @@ public class notMovingObject {
     private double resize;
     private ArrayList<Image> frames;
     private int lastFrameReturned;
+    private int frameRate;
+    private int framesCounter;
 
     //CONSTRUCTORS
     private notMovingObject () {
@@ -19,6 +21,8 @@ public class notMovingObject {
         this.resize = 1;
         this.frames = new ArrayList<>();
         this.lastFrameReturned = 0;
+        this.frameRate = 6;
+        this.framesCounter = 0;
     }
     private notMovingObject (double centerFromTop, double centerFromLeft) {
         this();
@@ -33,9 +37,11 @@ public class notMovingObject {
         this(centerFromTop, centerFromLeft);
         this.resetAndAddAllFrames(baseAddress, howManyFrames);
     }
-    public notMovingObject (double centerFromTop, double centerFromLeft, int howManyFrames, String baseAddress, double resize) {
+    public notMovingObject (double centerFromTop, double centerFromLeft, int howManyFrames, String baseAddress,
+                            double resize, int frameRate) {
         this(centerFromTop, centerFromLeft, howManyFrames, baseAddress);
         this.resize = resize;
+        this.frameRate = frameRate;
     }
     ////CONSTRUCTORS
 
@@ -83,6 +89,10 @@ public class notMovingObject {
     protected double getImageWidth (int index) {
         return this.getFrame(index).getWidth();
     }
+
+    protected int getFrameRate () {
+        return this.frameRate;
+    }
     ////GETTERS
 
 
@@ -117,11 +127,20 @@ public class notMovingObject {
 
     //HANDLING OUTPUT
     public void print (GraphicsContext context) {
+        framesCounter++;
         context.save();
 
-        context.translate(this.getCenterFromLeft(),this.getCenterFromTop());
-        context.drawImage(this.getNextFrame(),0,0, 50, 200);
+        context.translate(this.getCenterFromLeft() ,this.getCenterFromTop());
+        if (framesCounter < frameRate)
+            context.drawImage(this.getFrame(this.lastFrameReturned),
+                    -this.getImageWidth(lastFrameReturned)/2, -this.getImageHeight(lastFrameReturned)/2,
+                    this.getImageWidth(lastFrameReturned) * resize, this.getImageHeight(lastFrameReturned) * resize);
+        else
+        context.drawImage(this.getNextFrame(),
+                    -this.getImageWidth(lastFrameReturned)/2, -this.getImageHeight(lastFrameReturned)/2,
+                    this.getImageWidth(lastFrameReturned) * resize, this.getImageHeight(lastFrameReturned) * resize);
 
+        framesCounter %= frameRate;
         context.restore();
     }
 }

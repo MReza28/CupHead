@@ -14,8 +14,10 @@ import model.animatedObjects.notMovingObject;
 public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        notMovingObject boss = new notMovingObject(0, 0, 10,
+        notMovingObject boss = new notMovingObject(300, 700, 10,
                 MainFx.class.getResource("images/bossFly/").toExternalForm());
+        notMovingObject bosss = new notMovingObject(100, 200, 4,
+                MainFx.class.getResource("images/purple/").toExternalForm(), 2, 4);
 
         AnchorPane anchorPane = new AnchorPane();
         Canvas canvas = new Canvas(1280,720);
@@ -30,14 +32,11 @@ public class MainFx extends Application {
             int s = 0;
             @Override
             public void handle(long nanotime) {
-                if (s < 6) {
-                    s++;
-                    return;
-                }
-                s%=6;
                 context.setFill(Color.WHITE);
                 context.fillRect(0,0,1280,720);
                 boss.print(context);
+                bosss.print(context);
+                System.gc();
             }
         };
 
