@@ -16,11 +16,11 @@ public class MagicArtsHandler {
         framesPassed = -1;
         playingMagicArt = -1;
     }
-    MagicArtsHandler(MagicArt magicArt) {
+    public MagicArtsHandler(MagicArt magicArt) {
         this();
         magicArts.add(magicArt);
     }
-    MagicArtsHandler(ArrayList<MagicArt> magicArts) {
+    public MagicArtsHandler(ArrayList<MagicArt> magicArts) {
         this();
         Collections.copy(this.magicArts, magicArts);
     }
@@ -48,7 +48,10 @@ public class MagicArtsHandler {
 
     //isMETHODS
     public boolean isFinished () {
-        return this.playingMagicArt == -1;
+        if (playingMagicArt == -1 || framesPassed == -1) return true;
+        MovingArt tempArt = getMovingArt(playingMagicArt);
+        return (framesPassed / tempArt.getFrameRate()) >= tempArt.getFramesCount();
+        //TODO caution here
     }
 
 
@@ -64,8 +67,9 @@ public class MagicArtsHandler {
 
     //RETURNING IMAGES AND SOUNDS
     public Image getFrame () {
-        if (this.isFinished()) return null;
-        Image temp = getMovingArt(playingMagicArt).getNextFrame(framesPassed);
+        MovingArt tempArt = getMovingArt(playingMagicArt);
+        Image temp = tempArt.getFrame(framesPassed / tempArt.getFrameRate());
+
         this.framesPassed++;
         if (temp == null) {
             endMagicArt();

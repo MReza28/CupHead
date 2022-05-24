@@ -51,6 +51,10 @@ public class PositionVertex {
         this.addFromLeft(addingVertex.getFromLeft());
         this.addFromTop(addingVertex.getFromTop());
     }
+    public void addPositionVertex (double fromLeft, double fromTop) {
+        this.addFromLeft(fromLeft);
+        this.addFromTop(fromTop);
+    }
 
     public void multiplyPositionVertex (double multiplier) {
         this.multiplyFromLeft(multiplier);

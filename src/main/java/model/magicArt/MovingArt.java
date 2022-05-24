@@ -6,29 +6,41 @@ import java.util.ArrayList;
 
 public class MovingArt {
     private final ArrayList<Image> frames;
+    private int frameRate;
 
     //CONSTRUCTORS
     public MovingArt (String baseAddress, int howManyFrames) {
         frames = new ArrayList<>();
         addAllFrames(baseAddress, howManyFrames);
+        this.frameRate = 6;
+    }
+    public MovingArt (String baseAddress, int howManyFrames, int frameRate) {
+        this(baseAddress, howManyFrames);
+        this.frameRate = frameRate;
     }
 
     //GETTERS
-    private int getFramesCount () {
+    public int getFramesCount () {
         return frames.size();
     }
 
-    private Image getFrame (int index) {
+    public int getFrameRate () {
+        return this.frameRate;
+    }
+
+    Image getFrame (int index) {
+        if (index >= this.getFramesCount()) return null;
         return frames.get(index);
     }
     Image getFirstFrame () {
         if (this.getFramesCount() == 0) return null;
         return frames.get(0);
     }
-    //null at the end of the frames
-    Image getNextFrame (int previousFrame) {
-        if (getFramesCount() <= previousFrame + 1) return null;
-        return getFrame((previousFrame + 1) % this.getFramesCount());
+
+
+    //SETTERS
+    public void setFrameRate (int frameRate) {
+        this.frameRate = frameRate;
     }
 
 

@@ -1,7 +1,89 @@
 package model.objects;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import model.magicArt.MagicArt;
 import model.magicArt.MagicArtsHandler;
 
+import java.util.Random;
+import java.util.regex.Matcher;
+
 public class ArtObject {
-    MagicArtsHandler magicArtsHandler;
+    private PositionVertex place;
+    private PositionVertex velocity;
+    private MagicArtsHandler magicArtsHandler;
+
+    private double resize;
+
+    private Image currentImage;
+
+
+    //CONSTRUCTORS
+    private ArtObject (MagicArt magicArt) {
+        place = new PositionVertex(0, 0);
+        velocity = new PositionVertex(0, 0);
+        this.magicArtsHandler = new MagicArtsHandler(magicArt);
+        this.resize = 1;
+    }
+    public ArtObject (PositionVertex place, MagicArt magicArt) {
+        this(magicArt);
+        this.place = place;
+    }
+    public ArtObject (double fromLeft, double fromTop, MagicArt magicArt) {
+        this(magicArt);
+        this.place.addPositionVertex(fromLeft, fromTop);
+    }
+    public ArtObject (PositionVertex place, PositionVertex velocity, MagicArt magicArt) {
+        this(place, magicArt);
+        this.velocity = velocity;
+    }
+    public ArtObject (double fromLeft, double fromTop, double velocityFromLeft, double velocityFromTop, MagicArt magicArt) {
+        this(fromLeft, fromTop, magicArt);
+        this.velocity.addPositionVertex(velocityFromLeft, velocityFromTop);
+    }
+    ////CONSTRUCTORS
+
+    //GETTERS
+    public PositionVertex getPlace() {
+        return place;
+    }
+
+    public PositionVertex getVelocity() {
+        return velocity;
+    }
+
+    public MagicArtsHandler getMagicArtsHandler() {
+        return magicArtsHandler;
+    }
+    //TODO get from top and from left here
+    ////GETTERS
+
+    //SETTERS
+    public void setResize(double resize) {
+        this.resize = resize;
+    }
+    //TODO set velocity and place
+    ////SETTERS
+
+
+    //HANDLING OUTPUT
+    private void updateObjectMagicArt () {
+        this.currentImage = magicArtsHandler.getFrame();
+        this.place.addPositionVertex(velocity);
+    }
+
+    public void print (GraphicsContext context) {
+        Random random = new Random();
+
+        if (magicArtsHandler.isFinished()) magicArtsHandler.playMagicArt(Math.abs(random.nextInt()) % 2);
+        updateObjectMagicArt();
+        context.save();
+
+        context.translate(this.getPlace().getFromLeft() ,this.getPlace().getFromTop());
+
+        context.drawImage(currentImage, 0, 0,
+                currentImage.getWidth() * resize, currentImage.getHeight() * resize);
+
+        context.restore();
+    }
 }
