@@ -5,10 +5,11 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class MovingArt {
-    private ArrayList<Image> frames;
+    private final ArrayList<Image> frames;
 
     //CONSTRUCTORS
     public MovingArt (String baseAddress, int howManyFrames) {
+        frames = new ArrayList<>();
         addAllFrames(baseAddress, howManyFrames);
     }
 
