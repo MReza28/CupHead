@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.magicArt.MagicArt;
 import model.objects.ArtObject;
-import model.objects.notMovingObject;
 import model.magicArt.MovingArt;
 import model.magicArt.SoundOnArt;
 
@@ -25,11 +24,6 @@ public class MainFx extends Application {
 
         ArtObject artObject = new ArtObject(100, 100, 0.2, 0, magicArt);
         artObject.getMagicArtsHandler().addMagicArt(magicArt1);
-
-        notMovingObject boss = new notMovingObject(300, 700, 10,
-                MainFx.class.getResource("images/bossFly/").toExternalForm());
-        notMovingObject bosss = new notMovingObject(100, 200, 4,
-                MainFx.class.getResource("images/purple/").toExternalForm(), 2, 4);
 
         AnchorPane anchorPane = new AnchorPane();
         Canvas canvas = new Canvas(1280,720);
@@ -46,8 +40,6 @@ public class MainFx extends Application {
             public void handle(long nanotime) {
                 context.setFill(Color.WHITE);
                 context.fillRect(0,0,1280,720);
-                boss.print(context);
-                bosss.print(context);
                 artObject.print(context);
                 System.gc();
             }
