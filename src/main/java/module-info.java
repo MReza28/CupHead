@@ -8,4 +8,6 @@ module com.example.cuphead {
 
     opens main to javafx.fxml;
     exports main;
+
+    //TODO other places
 }

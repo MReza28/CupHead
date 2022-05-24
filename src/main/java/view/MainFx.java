@@ -1,6 +1,5 @@
 package view;
 
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,11 +8,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.animatedObjects.notMovingObject;
+import model.objects.notMovingObject;
+import model.magicArt.MovingArt;
+import model.magicArt.SoundOnArt;
 
 public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        MovingArt oneArt = new MovingArt(MainFx.class.getResource("images/bossFly/").toExternalForm(), 10);
+        SoundOnArt tempp = new SoundOnArt();
+
         notMovingObject boss = new notMovingObject(300, 700, 10,
                 MainFx.class.getResource("images/bossFly/").toExternalForm());
         notMovingObject bosss = new notMovingObject(100, 200, 4,
