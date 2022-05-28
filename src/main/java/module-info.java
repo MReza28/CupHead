@@ -1,8 +1,9 @@
 module com.example.cuphead {
     requires javafx.controls;
     requires javafx.fxml;
-            
-                        
+    requires javafx.media;
+
+
     opens view to javafx.fxml;
     exports view;
 

@@ -1,7 +1,9 @@
 package model.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.magicArt.MagicArt;
 import model.magicArt.MagicArtsHandler;
 
@@ -11,6 +13,7 @@ import java.util.regex.Matcher;
 public class ArtObject {
     private PositionVertex place;
     private PositionVertex velocity;
+    private PositionVertex acceleration;
     private MagicArtsHandler magicArtsHandler;
 
     private double resize;
@@ -22,6 +25,7 @@ public class ArtObject {
     private ArtObject (MagicArt magicArt) {
         place = new PositionVertex(0, 0);
         velocity = new PositionVertex(0, 0);
+        acceleration = new PositionVertex(0, 0);
         this.magicArtsHandler = new MagicArtsHandler(magicArt);
         this.resize = 1;
     }
@@ -41,6 +45,11 @@ public class ArtObject {
         this(fromLeft, fromTop, magicArt);
         this.velocity.addPositionVertex(velocityFromLeft, velocityFromTop);
     }
+    public ArtObject (double fromLeft, double fromTop, double velocityFromLeft, double velocityFromTop,
+                      double accelerationFromLeft, double accelerationFromTop, MagicArt magicArt) {
+        this(fromLeft, fromTop, velocityFromLeft, velocityFromTop, magicArt);
+        this.acceleration.addPositionVertex(accelerationFromLeft, accelerationFromTop);
+    }
     ////CONSTRUCTORS
 
     //GETTERS
@@ -50,6 +59,10 @@ public class ArtObject {
 
     public PositionVertex getVelocity() {
         return velocity;
+    }
+
+    public PositionVertex getAcceleration() {
+        return acceleration;
     }
 
     public MagicArtsHandler getMagicArtsHandler() {
@@ -69,18 +82,18 @@ public class ArtObject {
     //HANDLING OUTPUT
     private void updateObjectMagicArt () {
         this.currentImage = magicArtsHandler.getFrame();
+        this.velocity.addPositionVertex(acceleration);
         this.place.addPositionVertex(velocity);
     }
 
     public void print (GraphicsContext context) {
         Random random = new Random();
 
-        if (magicArtsHandler.isFinished()) magicArtsHandler.playMagicArt(Math.abs(random.nextInt()) % 2);
+        if (magicArtsHandler.isFinished()) magicArtsHandler.playMagicArt(0);
         updateObjectMagicArt();
         context.save();
 
         context.translate(this.getPlace().getFromLeft() ,this.getPlace().getFromTop());
-
         context.drawImage(currentImage, 0, 0,
                 currentImage.getWidth() * resize, currentImage.getHeight() * resize);
 
