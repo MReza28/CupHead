@@ -15,23 +15,21 @@ import model.objects.ArtObject;
 import model.magicArt.MovingArt;
 import model.magicArt.SoundOnArt;
 
-import java.io.File;
-import java.util.ArrayList;
-
 public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        MovingArt oneArt = new MovingArt(MainFx.class.getResource("images/purple/").toExternalForm(), 4);
+        MovingArt oneArt = new MovingArt(MainFx.class.getResource("images/purple/").toExternalForm(), 4, 6, true, true);
         MovingArt two = new MovingArt(MainFx.class.getResource("images/BossShoot/").toExternalForm(), 12);
         SoundOnArt tempp = new SoundOnArt();
-        MagicArt magicArt = new MagicArt(oneArt, tempp);
-        MagicArt magicArt1 = new MagicArt(two, tempp);
+        MagicArt magicArt = new MagicArt(oneArt, null);
+        MagicArt magicArt1 = new MagicArt(two, null);
 
         ArtObject[] artsObject = new ArtObject[2000];
         for (int i = 0; i < 2000; i++) {
             artsObject[i] = new ArtObject(100+i,600,0,-6, 0, +0.05, magicArt);
             artsObject[i].getMagicArtsHandler().addMagicArt(magicArt1);
         }
+        artsObject[0].getMagicArtsHandler().playMagicArt(0);
 
         ArtObject artObject = new ArtObject(100, 100, 0.2, 0, magicArt);
         artObject.getMagicArtsHandler().addMagicArt(magicArt1);
@@ -47,7 +45,7 @@ public class MainFx extends Application {
 
         Media x = new Media ((MainFx.class.getResource("sounds/1. Halsey - Ashley (320).mp3").toString()));
         MediaPlayer p = new MediaPlayer(x);
-        p.play();
+        //p.play();
 
         AnimationTimer game  = new AnimationTimer() {
             int s = 0;
@@ -56,11 +54,15 @@ public class MainFx extends Application {
                 context.setFill(Color.WHITE);
                 context.fillRect(0,0,1280,720);
                 //artObject.print(context);
-                for (int i = 0; i < 2000; i++) {
+                for (int i = 0; i < 1; i++) {
                     artsObject[i].print(context);
                 }
-                System.gc();
-                p.play();
+                s++;
+                if (s == 120)
+                {
+                    MediaPlayer sss = new MediaPlayer(x);
+                    sss.play();
+                }
             }
         };
 

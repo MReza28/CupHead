@@ -1,5 +1,7 @@
 package model.magicArt;
 
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
@@ -31,10 +33,16 @@ public class MagicArtsHandler {
         return magicArts.get(index);
     }
 
+    private MovingArt getMovingArt () {
+        return getMagicArt(playingMagicArt).getMovingArt();
+    }
     private MovingArt getMovingArt (int index) {
         return getMagicArt(index).getMovingArt();
     }
 
+    private SoundOnArt getSoundOnArt () {
+        return getMagicArt(playingMagicArt).getSoundOnArt();
+    }
     private SoundOnArt getSoundOnArt (int index) {
         return getMagicArt(index).getSoundOnArt();
     }
@@ -49,7 +57,7 @@ public class MagicArtsHandler {
     //isMETHODS
     public boolean isFinished () {
         if (playingMagicArt == -1 || framesPassed == -1) return true;
-        MovingArt tempArt = getMovingArt(playingMagicArt);
+        MovingArt tempArt = getMovingArt();
         return (framesPassed / tempArt.getFrameRate()) >= tempArt.getFramesCount();
         //TODO caution here
     }
@@ -65,17 +73,47 @@ public class MagicArtsHandler {
         this.framesPassed = -1;
     }
 
+
     //RETURNING IMAGES AND SOUNDS
     public Image getFrame () {
-        MovingArt tempArt = getMovingArt(playingMagicArt);
+        MovingArt tempArt = getMovingArt();
         Image temp = tempArt.getFrame(framesPassed / tempArt.getFrameRate());
-
-        this.framesPassed++;
+        framedPassedHandler();
         if (temp == null) {
             endMagicArt();
             return null;
         }
         return temp;
+    }
+    private void framedPassedHandler () {
+        if (getMovingArt().isLoop()) {
+            if (getMovingArt().isUpFrame()) {
+                framesPassed++;
+                if (isFinished()) framesPassed = 0;
+            }
+            else {
+                framesPassed--;
+                if (framesPassed < 0)
+                    framesPassed = getMovingArt().getFrameRate() * getMovingArt().getFramesCount() - 1;
+            }
+        }
+        else {
+            if (getMovingArt().isUpFrame()) {
+                framesPassed++;
+                if (isFinished()) framesPassed--;
+            }
+            else {
+                framesPassed--;
+                if (framesPassed < 0) framesPassed++;
+            }
+        }
+    }
+
+    public ColorAdjust getEffect () {
+        ColorAdjust effect = new ColorAdjust();
+        //Works on Effect
+        ////
+        return effect;
     }
 
     //TODO...

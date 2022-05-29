@@ -1,10 +1,10 @@
-package model.objects;
+package model;
 
 public class PositionVertex {
     private double fromLeft;
     private double fromTop;
 
-    PositionVertex (double fromLeft, double fromTop) {
+    public PositionVertex (double fromLeft, double fromTop) {
         this.fromLeft = fromLeft;
         this.fromTop = fromTop;
     }

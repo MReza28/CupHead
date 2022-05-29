@@ -1,19 +1,18 @@
 package model.objects;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import model.PositionVertex;
 import model.magicArt.MagicArt;
 import model.magicArt.MagicArtsHandler;
 
 import java.util.Random;
-import java.util.regex.Matcher;
 
 public class ArtObject {
     private PositionVertex place;
     private PositionVertex velocity;
     private PositionVertex acceleration;
+
     private MagicArtsHandler magicArtsHandler;
 
     private double resize;
@@ -80,23 +79,27 @@ public class ArtObject {
 
 
     //HANDLING OUTPUT
+    private void updateArtObject () {
+        updateObjectMagicArt();
+        updateObjectPlace();
+    }
     private void updateObjectMagicArt () {
         this.currentImage = magicArtsHandler.getFrame();
+    }
+    protected void updateObjectPlace () {
         this.velocity.addPositionVertex(acceleration);
         this.place.addPositionVertex(velocity);
     }
 
     public void print (GraphicsContext context) {
-        Random random = new Random();
-
-        if (magicArtsHandler.isFinished()) magicArtsHandler.playMagicArt(0);
-        updateObjectMagicArt();
+        updateArtObject();
         context.save();
-
+        context.setEffect(magicArtsHandler.getEffect());
         context.translate(this.getPlace().getFromLeft() ,this.getPlace().getFromTop());
         context.drawImage(currentImage, 0, 0,
                 currentImage.getWidth() * resize, currentImage.getHeight() * resize);
 
         context.restore();
     }
+    ////Handling Output
 }
