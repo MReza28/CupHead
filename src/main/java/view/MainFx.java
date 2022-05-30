@@ -26,7 +26,7 @@ public class MainFx extends Application {
 
         ArtObject[] artsObject = new ArtObject[2000];
         for (int i = 0; i < 2000; i++) {
-            artsObject[i] = new ArtObject(100+i,600,0,-6, 0, +0.05, magicArt);
+            artsObject[i] = new ArtObject(78,60,0,0, 0, 0, magicArt);
             artsObject[i].getMagicArtsHandler().addMagicArt(magicArt1);
         }
         artsObject[0].getMagicArtsHandler().playMagicArt(0);

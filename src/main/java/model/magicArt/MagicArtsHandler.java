@@ -10,8 +10,8 @@ import java.util.Collections;
 public class MagicArtsHandler {
     private final ArrayList<MagicArt> magicArts;
 
-    int framesPassed;
-    int playingMagicArt;
+    private int framesPassed;
+    private int playingMagicArt;
 
     private MagicArtsHandler () {
         this.magicArts = new ArrayList<>();
@@ -47,6 +47,13 @@ public class MagicArtsHandler {
         return getMagicArt(index).getSoundOnArt();
     }
 
+    public int getFramesPassed() {
+        return framesPassed;
+    }
+
+    public int getPlayingMagicArt() {
+        return playingMagicArt;
+    }
 
     //SETTERS
     public void addMagicArt (MagicArt magicArt) {

@@ -9,6 +9,9 @@ import model.magicArt.MagicArtsHandler;
 import java.util.Random;
 
 public class ArtObject {
+    private boolean isVisible;
+    private boolean isDead;
+
     private PositionVertex place;
     private PositionVertex velocity;
     private PositionVertex acceleration;
@@ -22,6 +25,8 @@ public class ArtObject {
 
     //CONSTRUCTORS
     private ArtObject (MagicArt magicArt) {
+        isVisible = true;
+        isDead = false;
         place = new PositionVertex(0, 0);
         velocity = new PositionVertex(0, 0);
         acceleration = new PositionVertex(0, 0);
@@ -67,19 +72,49 @@ public class ArtObject {
     public MagicArtsHandler getMagicArtsHandler() {
         return magicArtsHandler;
     }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    private double getWidth () {
+        return currentImage.getWidth() * resize;
+    }
+
+    private double getHeight () {
+        return currentImage.getHeight() * resize;
+    }
     //TODO get from top and from left here
+
     ////GETTERS
 
     //SETTERS
     public void setResize(double resize) {
         this.resize = resize;
     }
+
+    public void setVisible() {
+        this.isVisible = !isVisible;
+    }
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+    }
+
+    public void killObject() {
+        isDead = true;
+        isVisible = false;
+    }
+
     //TODO set velocity and place
     ////SETTERS
 
 
     //HANDLING OUTPUT
-    private void updateArtObject () {
+    protected void updateArtObject () {
         updateObjectMagicArt();
         updateObjectPlace();
     }
@@ -93,12 +128,13 @@ public class ArtObject {
 
     public void print (GraphicsContext context) {
         updateArtObject();
+
+        if (!isVisible()) return;
+
         context.save();
         context.setEffect(magicArtsHandler.getEffect());
         context.translate(this.getPlace().getFromLeft() ,this.getPlace().getFromTop());
-        context.drawImage(currentImage, 0, 0,
-                currentImage.getWidth() * resize, currentImage.getHeight() * resize);
-
+        context.drawImage(currentImage, -getWidth()/2, -getHeight()/2, getWidth(), getHeight());
         context.restore();
     }
     ////Handling Output
