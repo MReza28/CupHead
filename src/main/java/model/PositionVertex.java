@@ -17,6 +17,11 @@ public class PositionVertex {
     public double getFromTop() {
         return fromTop;
     }
+
+    public boolean isInRectangle (double fromLeft0, double fromTop0, double fromLeft1, double fromTop1) {
+        return getFromLeft() >= fromLeft0 && getFromLeft() <= fromLeft1 &&
+                getFromTop() >= fromTop0 && getFromTop() <= fromTop1;
+    }
     ////GETTERS
 
 

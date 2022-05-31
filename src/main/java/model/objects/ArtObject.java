@@ -6,8 +6,6 @@ import model.PositionVertex;
 import model.magicArt.MagicArt;
 import model.magicArt.MagicArtsHandler;
 
-import java.util.Random;
-
 public class ArtObject {
     private boolean isVisible;
     private boolean isDead;
@@ -90,6 +88,23 @@ public class ArtObject {
     }
     //TODO get from top and from left here
 
+    public boolean isInBorder () {
+        return this.getPlace().isInRectangle(-getWidth()/2, -getHeight()/2,
+                1920 + getWidth()/2 ,1080 + getHeight()/2);
+    }
+
+    public boolean isInsideBorder () {
+        return this.getPlace().isInRectangle(getWidth()/2, getHeight()/2,
+                1920 - getWidth()/2 ,1080 - getHeight()/2);
+    }
+
+    public boolean isInObject (double fromLeft, double fromTop) {
+        PositionVertex position = new PositionVertex(fromLeft, fromTop);
+        double fromLeftTemp = this.getPlace().getFromLeft();
+        double fromTopTemp = this.getPlace().getFromTop();
+        return position.isInRectangle(fromLeftTemp - getWidth()/2, fromTopTemp - getHeight()/2,
+                fromLeftTemp + getWidth()/2, fromTopTemp + getHeight()/2);
+    }
     ////GETTERS
 
     //SETTERS
@@ -118,7 +133,7 @@ public class ArtObject {
         updateObjectMagicArt();
         updateObjectPlace();
     }
-    private void updateObjectMagicArt () {
+    protected void updateObjectMagicArt () {
         this.currentImage = magicArtsHandler.getFrame();
     }
     protected void updateObjectPlace () {
@@ -127,9 +142,11 @@ public class ArtObject {
     }
 
     public void print (GraphicsContext context) {
-        updateArtObject();
+        if (!isVisible() || isDead) {
+            return;
+        }
 
-        if (!isVisible()) return;
+        updateArtObject();
 
         context.save();
         context.setEffect(magicArtsHandler.getEffect());
@@ -138,4 +155,13 @@ public class ArtObject {
         context.restore();
     }
     ////Handling Output
+
+    //HANDLING IMAGE OR TRANSPARENT
+    public boolean isInImage (double fromLeft, double fromTop) {
+        if (!isInObject(fromLeft, fromTop)) return false;
+        double fromLeftImg = fromLeft - (this.getPlace().getFromLeft() - getWidth()/2);
+        double fromTopImg = fromTop - (this.getPlace().getFromTop() - getHeight()/2);
+
+        return currentImage.getPixelReader().getColor((int)fromLeftImg, (int)fromTopImg).getOpacity() != 0;
+    }
 }

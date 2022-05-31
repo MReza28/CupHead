@@ -63,10 +63,17 @@ public class MagicArtsHandler {
 
     //isMETHODS
     public boolean isFinished () {
+
         if (playingMagicArt == -1 || framesPassed == -1) return true;
         MovingArt tempArt = getMovingArt();
         return (framesPassed / tempArt.getFrameRate()) >= tempArt.getFramesCount();
+
         //TODO caution here
+    }
+
+    public boolean isInLastFrame () {
+        MovingArt tempArt = getMovingArt();
+        return (framesPassed / tempArt.getFrameRate()) >= tempArt.getFramesCount() - 1;
     }
 
 
@@ -107,11 +114,15 @@ public class MagicArtsHandler {
         else {
             if (getMovingArt().isUpFrame()) {
                 framesPassed++;
-                if (isFinished()) framesPassed--;
+                if (isFinished()) {
+                    framesPassed--;
+                }
             }
             else {
                 framesPassed--;
-                if (framesPassed < 0) framesPassed++;
+                if (framesPassed < 0) {
+                    framesPassed++;
+                }
             }
         }
     }

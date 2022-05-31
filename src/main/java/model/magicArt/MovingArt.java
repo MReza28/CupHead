@@ -13,7 +13,7 @@ public class MovingArt {
     //CONSTRUCTORS
     private MovingArt () {
         frames = new ArrayList<>();
-        this.frameRate = 6;
+        this.frameRate = 5;
         isLoop = true;
         isUpFrame = true;
     }
@@ -88,7 +88,7 @@ public class MovingArt {
 
     private void addAllFrames (String baseAddress, int howManyFrames) {
         for (int i = 1; i <= howManyFrames; i++) {
-            addFrameToObject(baseAddress + i + ".png");
+            addFrameToObject(baseAddress + "img (" + i + ").png");
         }
     }
     ////HANDLING IMAGE INPUTS IN OBJECT

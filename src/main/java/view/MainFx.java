@@ -1,82 +1,99 @@
 package view;
 
+import enums.Statics;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.magicArt.MagicArt;
+import model.magicArtInstances.artObjects.AliveObject;
+import model.magicArtInstances.artObjects.Bullet;
+import model.magicArtInstances.artObjects.CupHead;
 import model.objects.ArtObject;
 import model.magicArt.MovingArt;
 import model.magicArt.SoundOnArt;
+import view.fx.FxStaticSaves;
+import view.images.MagicArtsLoader;
 
 public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        MovingArt oneArt = new MovingArt(MainFx.class.getResource("images/purple/").toExternalForm(), 4, 6, true, true);
-        MovingArt two = new MovingArt(MainFx.class.getResource("images/BossShoot/").toExternalForm(), 12);
-        SoundOnArt tempp = new SoundOnArt();
-        MagicArt magicArt = new MagicArt(oneArt, null);
-        MagicArt magicArt1 = new MagicArt(two, null);
+        AliveObject aliveObject = new AliveObject(1800, 500, -Statics.flappyBirdsSpeed, 0, 0, 0,
+                MagicArtsLoader.FLAPPY_BIRD_PINK_FLY, 200);
+        aliveObject.getMagicArtsHandler().addMagicArt(MagicArtsLoader.FLAPPY_BIRD_YELLOW_DEATH);
 
-        ArtObject[] artsObject = new ArtObject[2000];
-        for (int i = 0; i < 2000; i++) {
-            artsObject[i] = new ArtObject(78,60,0,0, 0, 0, magicArt);
-            artsObject[i].getMagicArtsHandler().addMagicArt(magicArt1);
-        }
-        artsObject[0].getMagicArtsHandler().playMagicArt(0);
 
-        ArtObject artObject = new ArtObject(100, 100, 0.2, 0, magicArt);
-        artObject.getMagicArtsHandler().addMagicArt(magicArt1);
+        CupHead cupHead = new CupHead(3);
+
 
         AnchorPane anchorPane = new AnchorPane();
-        Canvas canvas = new Canvas(1280,720);
+        Canvas canvas = new Canvas(1920,1080);
         GraphicsContext context = canvas.getGraphicsContext2D();
         anchorPane.getChildren().add(canvas);
-        context.setFill(Color.MINTCREAM);
-        context.fillRect(50,50 , 500 ,500);
         Scene temp = new Scene(anchorPane);
         stage.setScene(temp);
+        inputHandler(temp);
+
 
         Media x = new Media ((MainFx.class.getResource("sounds/1. Halsey - Ashley (320).mp3").toString()));
         MediaPlayer p = new MediaPlayer(x);
-        //p.play();
 
         AnimationTimer game  = new AnimationTimer() {
-            int s = 0;
             @Override
             public void handle(long nanotime) {
                 context.setFill(Color.WHITE);
-                context.fillRect(0,0,1280,720);
-                //artObject.print(context);
-                for (int i = 0; i < 1; i++) {
-                    artsObject[i].print(context);
-                }
-                s++;
-                if (s == 120)
-                {
-                    MediaPlayer sss = new MediaPlayer(x);
-                    sss.play();
-                }
+                context.fillRect(0,0,1920,1080);
+                for (Bullet bullet: Bullet.BULLETS) bullet.print(context);
+                cupHead.print(context);
+                aliveObject.print(context);
+                aliveObject.reduceHP(1);
             }
         };
 
+        MousEIn
         game.start();
 
-        //game.start();
-
-        stage.setHeight(720);
-        stage.setWidth(1280);
+        stage.setWidth(1920);
+        stage.setHeight(1080);
+        stage.setFullScreen(true);
+        stage.setResizable(false);
         stage.show();
-
     }
 
     public void run() {
         launch();
+    }
+
+    public void inputHandler (Scene scene) {
+        scene.setOnKeyPressed(
+                (KeyEvent event) -> {
+                    String keyName = event.getCode().name();
+                    if (keyName.equals("W")) FxStaticSaves.KEY_W = true;
+                    if (keyName.equals("A")) FxStaticSaves.KEY_A = true;
+                    if (keyName.equals("S")) FxStaticSaves.KEY_S = true;
+                    if (keyName.equals("D")) FxStaticSaves.KEY_D = true;
+                    if (keyName.equals("SPACE")) FxStaticSaves.KEY_SPACE = true;
+                    if (keyName.equals("TAB")) FxStaticSaves.KEY_TAB = !FxStaticSaves.KEY_TAB;
+                }
+        );
+        scene.setOnKeyReleased(
+                (KeyEvent event) -> {
+                    String keyName = event.getCode().name();
+                    if (keyName.equals("W")) FxStaticSaves.KEY_W = false;
+                    if (keyName.equals("A")) FxStaticSaves.KEY_A = false;
+                    if (keyName.equals("S")) FxStaticSaves.KEY_S = false;
+                    if (keyName.equals("D")) FxStaticSaves.KEY_D = false;
+                    if (keyName.equals("SPACE")) FxStaticSaves.KEY_SPACE = false;
+                }
+        );
     }
 }
